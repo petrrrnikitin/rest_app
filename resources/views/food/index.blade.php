@@ -1,26 +1,26 @@
 <?php
 
-use App\Category;
+use App\Food;
 
-/** @var Category $category */
-/** @var Category $categories */
+/** @var Food $food */
+/** @var Food $foods */
 ?>
 
 @extends('layouts.app')
 
 @section('content')
-    <div class="container">
+    <div class="container-fluid">
         <div class="row justify-content-center">
-            <div class="col-md-8">
+            <div class="col-md-10 col-12 col-lg-8">
                 @if(Session::has('message'))
                     <div class="alert alert-success">{{ Session::get('message') }}</div>
                 @endif
                 <div class="card">
-                    <div class="card-header">All Categories
+                    <div class="card-header">All Food
                         <span class="float-right">
-                            <a href="{{ route('category.create') }}">
+                            <a href="{{ route('food.create') }}">
                                 <button class="btn btn-outline-success">
-                                Create new Category
+                                Create new Food
                                 </button>
                             </a>
                         </span>
@@ -29,32 +29,40 @@ use App\Category;
                         <table class="table table-hover">
                             <thead class="thead-dark">
                             <tr>
-                                <th scope="col">#</th>
+                                <th scope="col">Image</th>
                                 <th scope="col">Name</th>
+                                <th scope="col">Description</th>
+                                <th scope="col">Price</th>
+                                <th scope="col">Category</th>
                                 <th scope="col">Edit</th>
                                 <th scope="col">Delete</th>
                             </tr>
                             </thead>
                             <tbody>
-                            @if(count($categories) > 0)
-                                @foreach($categories as $key => $category)
+                            @if(count($foods) > 0)
+                                @foreach($foods as $key => $food)
                                     <tr>
-                                        <th scope="row">{{ $key+1 }}</th>
-                                        <td>{{ $category->name }}</td>
-                                        <td><a href="{{ route('category.edit', [$category->id]) }}">
+                                        <th scope="row"><img width="50" height="50"
+                                                             src="{{ asset('images') }}/{{ $food->image }}"
+                                                             alt="{{ $food->name }}"></th>
+                                        <td>{{ $food->name }}</td>
+                                        <td>{{ $food->description }}</td>
+                                        <td>${{ $food->price }}</td>
+                                        <td>{{ $food->category->name }}</td>
+                                        <td><a href="{{ route('food.edit', [$food->id]) }}">
                                                 <button class="btn btn-outline-success">Edit</button>
                                             </a></td>
                                         <td>
                                             <button type="button" class="btn btn-outline-danger" data-toggle="modal"
-                                                    data-target="#confirmDelete{{$category->id}}">
+                                                    data-target="#confirmDelete{{$food->id}}">
                                                 Delete
                                             </button>
                                         </td>
-                                        <div class="modal fade" id="confirmDelete{{$category->id}}" tabindex="-1"
+                                        <div class="modal fade" id="confirmDelete{{$food->id}}" tabindex="-1"
                                              role="dialog"
                                              aria-labelledby="exampleModalLabel" aria-hidden="true">
                                             <div class="modal-dialog" role="document">
-                                                <form action="{{ route('category.destroy', [$category->id]) }}"
+                                                <form action="{{ route('food.destroy', [$food->id]) }}"
                                                       method="post">@csrf
                                                     {{ method_field('DELETE') }}
                                                     <div class="modal-content">
@@ -67,7 +75,7 @@ use App\Category;
                                                             </button>
                                                         </div>
                                                         <div class="modal-body">
-                                                            Are you sure you want to delete category ?
+                                                            Are you sure you want to delete food ?
                                                         </div>
                                                         <div class="modal-footer">
                                                             <button type="button" class="btn btn-secondary"
@@ -88,7 +96,7 @@ use App\Category;
                                 <td>No category to display.</td>
                             @endif
                         </table>
-
+                        {{ $foods->links() }}
                     </div>
                 </div>
             </div>
