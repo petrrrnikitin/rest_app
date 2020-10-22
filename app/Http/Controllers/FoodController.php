@@ -2,11 +2,26 @@
 
 namespace App\Http\Controllers;
 
+use App\Category;
 use Illuminate\Http\Request;
 use App\Food;
 
 class FoodController extends Controller
 {
+    public function listFood()
+    {
+        $categories = Category::with('food')->get();
+        return view('index', compact('categories'));
+    }
+
+    public function view($id)
+    {
+        $food = Food::find($id);
+        return view('food.detail', compact('food'));
+    }
+
+
+
     /**
      * Display a listing of the resource.
      *
@@ -68,7 +83,8 @@ class FoodController extends Controller
      */
     public function show($id)
     {
-        //
+        $food = Food::find($id);
+        return view('food.view', compact('food'));
     }
 
     /**
